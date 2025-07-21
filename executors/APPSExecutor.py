@@ -10,7 +10,7 @@ from tqdm import tqdm
 from math import sqrt, log
 import multiprocessing
 import signal
-from pyext import RuntimeModule
+#from pyext import RuntimeModule
 import sys
 import faulthandler
 from unittest.mock import patch, mock_open
@@ -30,6 +30,15 @@ timeout = 11
 class AppsExecutor:
     def __init__(self, args):
         self.args = args
+    import types
+
+    class RuntimeModule:
+        @staticmethod
+        def from_string(name, path, code_string):
+            module = types.ModuleType(name)
+            exec(code_string, module.__dict__)
+            return module
+
 
     def check_correctness(self, prob_instance, code, mode, with_verbal=False):
         """
